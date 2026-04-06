@@ -80,17 +80,21 @@ def compute_stability(responses: list) -> float:
     return float(np.mean(scores))
 
 # PLateau Stop
-def plateau_stop(history: list, eps: float = 0.03) -> bool:
+def plateau_stop(history: list, eps: float = 0.03,
+                 min_stability: float = 0.70) -> bool:
     """
-    Return True if stability has converged: last two consecutive deltas
-    are both below eps.
+    Return True if stability has converged AND is high enough to act on.
 
-    Requires at least 3 history entries (2 deltas).
-    Two-consecutive requirement prevents stopping on a lucky flat step.
+    Two conditions must both hold:
+      1. Convergence: last two consecutive deltas both < eps
+      2. Quality floor: current stability >= min_stability
 
-    Args:
-        history: list of stability scores, one per batch
-        eps:     convergence tolerance (default 0.03)
+    Without condition 2, a low-stability trajectory that flattens
+    (e.g. 0.45 → 0.43 → 0.42, all deltas < eps) would incorrectly
+    trigger a plateau and return a useless prediction set.
+
+    min_stability=0.70 means the model must agree with itself on
+    at least ~70% of response pairs to commit to a prediction set.
     """
     if len(history) < 3:
         return False
@@ -98,7 +102,10 @@ def plateau_stop(history: list, eps: float = 0.03) -> bool:
     delta_1 = abs(history[-1] - history[-2])
     delta_2 = abs(history[-2] - history[-3])
 
-    return delta_1 < eps and delta_2 < eps
+    converged      = delta_1 < eps and delta_2 < eps
+    stable_enough  = history[-1] >= min_stability
+
+    return converged and stable_enough
 
 # Check if the response is uncertain
 def is_uncertainty_response(response: str) -> bool:

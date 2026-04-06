@@ -16,6 +16,7 @@ class SamplerConfig:
     eps:         float = 0.03  # convergence tolerance
     temperature: float = 0.9   # sampling temperature
     min_batches: int   = 2     # never stop before 2 batches
+    min_stability: float = 0.70
 
 # Uncertainity Tokens
 UNCERTAINTY_TOKENS = {

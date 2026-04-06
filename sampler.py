@@ -16,7 +16,7 @@ def adaptive_sample(
 
       abstain   (bool)  — True if no prediction set should be returned
       reason    (str)   — "plateau" | "uncertainty_responses" | "budget_exhausted"
-      n_score   (float) — 1 - stability, or None if abstaining
+      n_score   (float) —ta 1 - stability, or None if absining
       cleaned   (list)  — cleaned response strings
       history   (list)  — stability per batch
       n_batches (int)   — batches used
@@ -44,7 +44,7 @@ def adaptive_sample(
         history.append(stability)
 
         if batch_num >= config.min_batches:
-            if plateau_stop(history, eps=config.eps):
+            if plateau_stop(history, eps=config.eps, min_stability= config.min_stability):
 
                 cleaned = [clean_response(r) for r in all_responses]
 

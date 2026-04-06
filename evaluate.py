@@ -139,6 +139,7 @@ def run_full_evaluation(
 
         # Step 1: Calibrate
         cal = run_calibration(
+            DATASETS,
             dataset_name,
             alpha       = alpha,
             config      = DEFAULT_CONFIG,
