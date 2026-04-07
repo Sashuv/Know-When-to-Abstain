@@ -41,7 +41,6 @@ def load_model():
     return model, tokenizer
 
 
-model, tokenizer = load_model()
 
 # Generate LLM Respose
 def generate_response(
@@ -93,7 +92,7 @@ def generate_response(
     return response
 
 # Generate a batch of responses
-def generate_batch(question, n, temperature=0.9):
+def generate_batch(model, tokenizer, question, n, temperature=0.9):
     return [
         generate_response(model, tokenizer, question, temperature)
         for _ in range(n)

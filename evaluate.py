@@ -7,6 +7,8 @@ from calibration import check_coverage, run_calibration
 DEFAULT_CONFIG = SamplerConfig()
 
 def evaluate(
+    model,
+    tokenizer,
     DATASETS,
     dataset_name: str,
     alpha:        float,
@@ -57,7 +59,7 @@ def evaluate(
     for i, sample in enumerate(test_samples):
         clear_embed_cache()
 
-        result = adaptive_sample(sample.question, config=config)
+        result = adaptive_sample(model=model, tokenizer=tokenizer, question=sample.question, config=config)
         pred_set = build_prediction_set(result, q_hat)
 
         covered = check_coverage(pred_set, sample.gold_answers)
@@ -113,6 +115,8 @@ def evaluate(
 
 
 def run_full_evaluation(
+    model,
+    tokenizer,
     DATASETS,
     dataset_name:   str,
     alphas:         list,
@@ -139,6 +143,8 @@ def run_full_evaluation(
 
         # Step 1: Calibrate
         cal = run_calibration(
+            model,
+            tokenizer,
             DATASETS,
             dataset_name,
             alpha       = alpha,
@@ -149,6 +155,8 @@ def run_full_evaluation(
 
         # Step 2: Evaluate on test split
         eval_result = evaluate(
+            model,
+            tokenizer,
             DATASETS,
             dataset_name,
             alpha       = alpha,

@@ -6,6 +6,8 @@ from helpers import filter_split, _print_split_counts, clean_response, embed_cac
 DEFAULT_CONFIG = SamplerConfig()
 
 def adaptive_sample(
+    model,
+    tokenizer,
     question: str,
     config:   SamplerConfig = DEFAULT_CONFIG,
 ) -> dict:
@@ -34,9 +36,11 @@ def adaptive_sample(
     for batch_num in range(1, config.max_batches + 1):
 
         new_responses = generate_batch(
-            question,
-            n=config.batch_size,
-            temperature=config.temperature,
+        model,
+        tokenizer,
+        question,
+        n=config.batch_size,
+        temperature=config.temperature,
         )
         all_responses.extend(new_responses)
 

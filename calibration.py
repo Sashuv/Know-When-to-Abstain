@@ -44,6 +44,8 @@ def compute_qhat(n_scores: list, alpha: float) -> float:
 
 
 def run_calibration(
+    model,
+    tokenizer,
     DATASETS,
     dataset_name: str,
     alpha:        float         = 0.1,
@@ -95,7 +97,7 @@ def run_calibration(
     for i, sample in enumerate(samples):
         clear_embed_cache()
 
-        result = adaptive_sample(sample.question, config=config)
+        result = adaptive_sample(model=model, tokenizer=tokenizer, question=sample.question, config=config)
 
         result["question"]     = sample.question
         result["gold_answers"] = sample.gold_answers
