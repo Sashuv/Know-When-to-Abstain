@@ -16,8 +16,8 @@ def load_sentence_encoder():
 
 
 def load_model():
-    MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
-
+    #MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.3"
+    MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B-Instruct"
     bnb_config = BitsAndBytesConfig(
         load_in_4bit              = True,
         bnb_4bit_quant_type       = "nf4",
