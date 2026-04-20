@@ -1,5 +1,16 @@
 from collections import Counter
 import numpy as np
+from model import load_sentence_encoder
+
+
+ENCODER = None
+
+
+def _get_encoder():
+    global ENCODER
+    if ENCODER is None:
+        ENCODER = load_sentence_encoder()
+    return ENCODER
 
 
 def _assign_split(i: int, n_total: int) -> str:
@@ -62,7 +73,7 @@ def embed_cached(text: str) -> np.ndarray:
     """Embed text using MiniLM with caching. Returns L2-normalized vector."""
     key = text.strip().lower()
     if key not in _embed_cache:
-        emb = ENCODER.encode(
+        emb = _get_encoder().encode(
             key,
             normalize_embeddings=True,
             show_progress_bar=False,
